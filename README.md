@@ -1,7 +1,48 @@
 # COM-S579-NLP
 COM-S579-NLP-course-project-RAG
 
-# test git push
-git add .  
-git commit -m 'test git push'  
-git push  
+# requirements
+- llama-index==0.9.39
+- pymilvus
+- easydict
+- dashscope
+
+- torch
+- transformers
+- pyyaml
+- google-generativeai
+- gradio
+
+- pypdf
+
+# how to use(CML)
+1. clone repo
+2. install docker
+3. install milvus with docker
+```
+cd db
+sudo docker compose up -d
+```
+4. install python dependencies(recommend conda env)
+```
+pip install -r requirements.txt
+```
+5. build index using your file
+format:"build your_file_path"
+```
+python cli.py
+(rag) build ./data/menu.pdf
+```
+
+6. other features
+    - remove index: "remove filename"
+    ```
+    (rag) build menu.pdf
+    ```
+    - query: "ask"
+    ```
+    (rag) ask
+    (rag) 问题:年年有余怎么做？
+    ```
+
+
