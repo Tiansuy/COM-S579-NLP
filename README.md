@@ -15,7 +15,7 @@ COM-S579-NLP-course-project-RAG
 
 - pypdf
 
-# how to use(CML)
+# how to use(command line tool)
 1. clone repo
 2. install docker
 3. install milvus with docker
@@ -44,5 +44,6 @@ python cli.py
     (rag) ask
     (rag) 问题:年年有余怎么做？
     ```
-
+# how to use(GUI)
+- to be finished
 
