@@ -72,7 +72,7 @@ class HistorySentenceWindowNodeParser(NodeParser):
         for name in _mapping:
             if name in path:
                 return _mapping[name]
-        return "未名"
+        return ""
 
     @classmethod
     def from_defaults(
