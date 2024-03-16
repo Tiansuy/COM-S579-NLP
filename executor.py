@@ -169,7 +169,8 @@ class MilvusExecutor(Executor):
                 documents[0].text+=' '+documents[i].text
             documents[0].text = documents[0].text.replace('\n','')
             def add_newline_after_nth_period(text, n):
-                sentences = text.split('。')
+                # sentences = text.split('。')
+                sentences = re.split(r'[。\.]', text)
                 if sentences[-1] == '':
                     sentences.pop()
                 for i in range(n-1, len(sentences), n):
