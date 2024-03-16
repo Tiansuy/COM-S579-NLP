@@ -6,7 +6,6 @@ dashscope
 torch
 transformers
 pyyaml
-google-generativeai
 gradio
 
 pypdf

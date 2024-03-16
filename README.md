@@ -10,7 +10,6 @@ COM-S579-NLP-course-project-RAG
 - torch
 - transformers
 - pyyaml
-- google-generativeai
 - gradio
 
 - pypdf
@@ -27,14 +26,19 @@ sudo docker compose up -d
 ```
 pip install -r requirements.txt
 ```
-5. build index using your file
+5. set up openai api key to environment variable
+```
+setx OPENAI_API_KEY "your-api-key-here"
+```
+
+6. build index using your file
 format:"build your_file_path"
 ```
 python cli.py
 (rag) build ./data/menu.pdf
 ```
 
-6. other features
+7. other features
     - remove index: "remove filename"
     ```
     (rag) build menu.pdf

@@ -164,9 +164,18 @@ class MilvusExecutor(Executor):
             print(f'(rag) 没有找到文件{path}')
             return
         elif path.endswith('.pdf'):
-            documents = PDFReader().load_data(Path('data/menu.pdf'))
+            documents = PDFReader().load_data(Path(path))
             for i in range(1,len(documents)):
                 documents[0].text+=' '+documents[i].text
+            documents[0].text = documents[0].text.replace('\n','')
+            def add_newline_after_nth_period(text, n):
+                sentences = text.split('。')
+                if sentences[-1] == '':
+                    sentences.pop()
+                for i in range(n-1, len(sentences), n):
+                    sentences[i] += '\n'
+                return '.'.join(sentences)
+            documents[0].text = add_newline_after_nth_period(documents[0].text, 5)
             documents = [documents[0]]
             documents[0].metadata = {
                 "filename":documents[0].metadata['file_name'].split('\\')[-1],
