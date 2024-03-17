@@ -150,7 +150,7 @@ class HistorySentenceWindowNodeParser(NodeParser):
                 if title == None:
                     continue
                 for line_node in line_nodes:
-                    line_node.metadata["出处"] = f"《{book_name}·{title[0]}》"
+                    line_node.metadata["Reference"] = f"《{book_name}·{title[0]}》"
                 nodes.extend(line_nodes)
 
             for i, node in enumerate(nodes):
@@ -165,7 +165,7 @@ class HistorySentenceWindowNodeParser(NodeParser):
 
                 # exclude window metadata from embed and llm
                 node.excluded_embed_metadata_keys.extend(
-                    [self.window_metadata_key, self.original_text_metadata_key, 'title', 'file_path', '出处', 'file_name', 'filename', 'extension']
+                    [self.window_metadata_key, self.original_text_metadata_key, 'title', 'file_path', 'Reference', 'file_name', 'filename', 'extension']
                 )
                 node.excluded_llm_metadata_keys.extend(
                     [self.window_metadata_key, self.original_text_metadata_key, 'file_path', 'file_name', 'filename', 'extension']

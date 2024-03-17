@@ -1,13 +1,13 @@
-# Web UI 运行说明
+# Web UI Operating instructions
 
-## 1. 初始化
+## 1. Initialization
 
-输入config文件地址与选择[milvus|pipeline]方案，选择好后，点击第一个`初始化`，第一次将下载模型，可能速度较慢，完成后，会显示`CLI 初始化完成`
+Input config file path and choose [milvus|pipeline] then click the first `Initialization`，first time downloading the model may be slow, but after completion, it will display `CLI Initialization completed`
 
-## 2. 构建索引
+## 2. Build index
 
-在选择命令中选择`构建索引`，然后在问题中输入要构建的语料，例如 `./data/history_24/baihuasanguozhi.txt` 会将白话版《三国志》导入。可以在控制台看到embedding生成进度。 在问题中输入点击`提交`，注意，二十四史语料库较大。如果输入 `./data/history_24/` 会将该目录下所有文件进行索引构建，耗费时间较长，针对大规模语料库建议使用“Zilliz Cloud Pipelines方案”。
+Choose `Build index`then input the file to construct corpus, example `./data/bitcoin.pdf`, bitcoin.pdf will be input. You can see the progress of embedding generation in the consol. Note that if the corpus is large, like `./data/` will input all files in this path, may take a longer time. It is recommended to use the Zilliz Cloud Pipelines for large-scale corpora.
 
-## 3. 输入问题
+## 3. Input question
 
-在选择命令中选择`提问`或者`提问+返回检索内容`，然后在问题中输入正式问题，点击`提交`，即可得到回答。
+Choose `Ask` or `Ask + Return to retrieve content`，then input your question and click `submit` to get the answer.

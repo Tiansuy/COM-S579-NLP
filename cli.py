@@ -24,31 +24,31 @@ class CommandLine():
         self.show_start_info()
         while True:
             conf = read_yaml_config(self.config_path)
-            print('(rag) 选择[milvus|pipeline]方案')
+            print('(rag) Select [milvus|pipeline]')
             # mode = input('(rag) ')
             mode = 'milvus'
             
             if mode == 'milvus':
                 self._executor = MilvusExecutor(conf) 
-                print('(rag) milvus模式已选择')
-                print('  1.使用`build data/history_24/baihuasanguozhi.txt`来进行知识库构建。')
-                print('  2.已有索引可以使用`ask`进行提问, `-d`参数以debug模式进入。')
-                print('  3.删除已有索引可以使用`remove baihuasanguozhi.txt`。')
+                print('(rag) milvus has been selected')
+                print('  1. Use `build [path]` to build corpus')
+                print('  2. Use `ask` for existing index, `-d` ot enter debug mod')
+                print('  3. Use`remove [file]` to delete existing index' )
                 self._mode = 'milvus'
                 break
             elif mode == 'pipeline':
                 self._executor = PipelineExecutor(conf)
-                print('(rag) pipeline模式已选择, 使用`build https://raw.githubusercontent.com/wxywb/history_rag/master/data/history_24/baihuasanguozhi.txt`来进行知识库构建。')
-                print('  1.使用`build https://raw.githubusercontent.com/wxywb/history_rag/master/data/history_24/baihuasanguozhi.txt`来进行知识库构建。')
-                print('  2.已有索引可以使用`ask`进行提问, `-d`参数以debug模式进入。')
-                print('  3.删除已有索引可以使用`remove baihuasanguozhi.txt`。')
+                print('(rag) pipeline has been selected')
+                print('  1. Use `build https://raw.githubusercontent.com/wxywb/history_rag/master/[path]` to build corpus')
+                print('  2. Use `ask` for existing index, `-d` ot enter debug mod')
+                print('  3. Use`remove [file]` to delete existing index' )
                 self._mode = 'pipeline'
                 break
             elif mode == 'quit':
                 self._exit()
                 break
             else:
-                print(f'(rag) {mode}不是已知方案，选择[milvus|pipeline]方案,或者quit退出。')
+                print(f'(rag) {mode} is not known scheme，select one of [milvus|pipeline] or use `quit` to exit')
         assert self._mode != None
         while True:
             command_text = input("(rag) ")
@@ -62,7 +62,7 @@ class CommandLine():
                     print(commands)
                     self.build_index(path=commands[2], overwrite=True)
                 else:
-                    print('(rag) build仅支持 `-overwrite`参数')
+                    print('(rag) build only support `-overwrite` parameter')
             elif len(commands) == 2:
                 self.build_index(path=commands[1], overwrite=False)
         elif commands[0] == 'ask':
@@ -70,19 +70,19 @@ class CommandLine():
                 if commands[1] == '-d':
                     self._executor.set_debug(True)
                 else: 
-                    print('(rag) ask仅支持 `-d`参数 ')
+                    print('(rag) ask only support `-d` parameter ')
             else:
                 self._executor.set_debug(False)
             self.question_answer()
         elif commands[0] == 'remove':
             if len(commands) != 2:
-                print('(rag) remove只接受1个参数。')
+                print('(rag) remove only accept 1 parameter')
             self._executor.delete_file(commands[1])
             
         elif 'quit' in commands[0]:
             self._exit()
         else: 
-            print('(rag) 只有[build|ask|remove|quit]中的操作, 请重新尝试。')
+            print('(rag) Select one of [build|ask|remove|quit] to operate, please try again.')
             
     def query(self, question):
         ans = self._executor.query(question)
@@ -92,7 +92,7 @@ class CommandLine():
 
     def build_index(self, path, overwrite):
         self._executor.build_index(path, overwrite)
-        print('(rag) 索引构建完成')
+        print('(rag) Index building completed')
 
     def remove(self, filename):
         self._executor.delete_file(filename)
@@ -100,9 +100,9 @@ class CommandLine():
     def question_answer(self):
         self._executor.build_query_engine()
         while True: 
-            question = input("(rag) 问题: ")
+            question = input("(rag) Ask: ")
             if question == 'quit':
-                print('(rag) 退出问答')
+                print('(rag) Exit Q&A')
                 break
             elif question == "":
                 continue

@@ -7,8 +7,8 @@ from cli import CommandLine, read_yaml_config  # 导入 CommandLine 类
 
 resolutions = ["milvus", "pipeline"]
 
-build_tasks = ["构建索引", "删除索引"]
-query_tasks = ["提问", "提问+返回检索内容"]
+build_tasks = ["Build index", "Delete index"]
+query_tasks = ["Ask", "Ask + Return to retrieve content"]
 
 
 class GradioCommandLine(CommandLine):
@@ -17,17 +17,17 @@ class GradioCommandLine(CommandLine):
         self.config_path = cfg
 
     def index(self, task, path, overwrite):
-        if task == "构建索引":
+        if task == "Build index":
             self._executor.build_index(path, overwrite)
-            return "索引构建完成"
-        elif task == "删除索引":
+            return "Index building completed"
+        elif task == "Delete index":
             self._executor.delete_file(path)
-            return "删除索引"
+            return "Index deletion completed"
 
     def query(self, task, question):
-        if task == "提问":
+        if task == "Ask":
             return self._executor.query(question)
-        elif task == "提问+返回检索内容":
+        elif task == "Ask + Return to retrieve content":
             self._executor.set_debug(True)
             return self._executor.query(question)
 
@@ -43,7 +43,7 @@ def initialize_cli(cfg_path, resolution):
         cli_instance._executor = PipelineExecutor(conf)
         cli_instance._mode = "pipeline"
     cli_instance._executor.build_query_engine()
-    return "CLI 初始化完成"
+    return "CLI nitialization completed"
 
 
 with gr.Blocks() as demo:
@@ -51,20 +51,20 @@ with gr.Blocks() as demo:
     gr.Interface(fn=initialize_cli,
                  inputs=[gr.Textbox(
                      lines=1, value="cfgs/config.yaml"),
-                     gr.Dropdown(resolutions, label="索引类别", value="milvus")],
+                     gr.Dropdown(resolutions, label="Index categories", value="milvus")],
                  outputs="text",
-                 submit_btn="初始化", clear_btn="清空")
+                 submit_btn="Initialization", clear_btn="Clear")
     # 构建索引
     gr.Interface(fn=lambda command, argument, overwrite: cli_instance.index(command, argument, overwrite),
-                 inputs=[gr.Dropdown(choices=build_tasks, label="选择命令", value="构建索引"),
-                         gr.Textbox(label="路径"), gr.Checkbox(label="覆盖之前索引")], outputs="text",
-                 submit_btn="提交", clear_btn="清空")
+                 inputs=[gr.Dropdown(choices=build_tasks, label="Choose commend", value="Build index"),
+                         gr.Textbox(label="Path"), gr.Checkbox(label="Recover index")], outputs="text",
+                 submit_btn="Submit", clear_btn="Clear")
 
     # 提问
     gr.Interface(fn=lambda command, argument: cli_instance.query(command, argument),
-                 inputs=[gr.Dropdown(choices=query_tasks, label="选择命令", value="提问"),
-                         gr.Textbox(label="问题")], outputs="text",
-                 submit_btn="提交", clear_btn="清空")
+                 inputs=[gr.Dropdown(choices=query_tasks, label="Choose commend", value="Ask"),
+                         gr.Textbox(label="Question")], outputs="text",
+                 submit_btn="Submit", clear_btn="Clear")
     with open("docs/web_ui.md", "r", encoding="utf-8") as f:
         article = f.read()
     gr.Markdown(article)

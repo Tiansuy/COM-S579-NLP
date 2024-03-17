@@ -34,26 +34,28 @@ from src.history_sentence_window import HistorySentenceWindowNodeParser
 from pymilvus import MilvusClient
 
 QA_PROMPT_TMPL_STR = (
-    "请你仔细阅读相关内容，结合历史资料进行回答,每一条史资料使用'From：《书名》原文内容'的形式标注 (如果回答请清晰无误地引用原文,先给出回答，再贴上对应的原文，使用《书名》[]对原文进行标识),，如果发现资料无法得到答案，就回答不知道 \n"
-    "搜索的相关历史资料如下所示.\n"
+    "Please carefully read the relevant content and provide answers based on the materials. Each piece of information should be labeled in the form of 'From: <Title>' \
+        (if you answer, please cite the original text clearly and accurately, give your answer first, then attach the corresponding original text, and use the Book Title to label the original text). If you find that the information cannot be answered, you will answer 'I don't know' \n"
+    "The relevant information searched is as follows.\n"
     "---------------------\n"
     "{context_str}\n"
     "---------------------\n"
-    "问题: {query_str}\n"
-    "答案: "
+    "Question: {query_str}\n"
+    "Answer: "
 )
 
-QA_SYSTEM_PROMPT = "你是一个严谨的历史知识问答智能体，你会仔细阅读历史材料并给出准确的回答,你的回答都会非常准确，因为你在回答的之后，使用在《书名》[]内给出原文用来支撑你回答的证据.并且你会在开头说明原文是否有回答所需的知识"
+QA_SYSTEM_PROMPT = "You are a rigorous knowledge question answering agent. You will carefully read the materials and provide accurate answers. Your answers will be very accurate because after answering, \
+    you will use the evidence provided in <Title> [] to support your answer. You will also explain at the beginning whether the original text has the necessary knowledge to answer"
 
 REFINE_PROMPT_TMPL_STR = ( 
-    "你是一个历史知识回答修正机器人，你严格按以下方式工作"
-    "1.只有原答案为不知道时才进行修正,否则输出原答案的内容\n"
-    "2.修正的时候为了体现你的精准和客观，你非常喜欢使用《书名》[]将原文展示出来.\n"
-    "3.如果感到疑惑的时候，就用原答案的内容回答。"
-    "新的知识: {context_msg}\n"
-    "问题: {query_str}\n"
-    "原答案: {existing_answer}\n"
-    "新答案: "
+    "You are a knowledge answering and correction robot, and you strictly work in the following way"
+    "1. Only make corrections when the original answer is unknown, otherwise output the content of the original answer\n"
+    "2. When making revisions, in order to demonstrate your accuracy and objectivity, you really enjoy using <Title> [] to present the original text.\n"
+    "3. If you feel confused, answer with the content of the original answer."
+    "New knowledge: {context_msg}\n"
+    "Question: {query_str}\n"
+    "Original Answer: {existing_answer}\n"
+    "New Answer: "
 )
 
 def is_valid_url(url):
@@ -161,7 +163,7 @@ class MilvusExecutor(Executor):
             dim=config.embedding.dim)
         self._milvus_client = vector_store.milvusclient
         if os.path.exists(path) is False:
-            print(f'(rag) 没有找到文件{path}')
+            print(f'(rag) File not find{path}')
             return
         elif path.endswith('.pdf'):
             documents = PDFReader().load_data(Path(path))
@@ -187,10 +189,10 @@ class MilvusExecutor(Executor):
             documents = FlatReader().load_data(Path(path))
             documents[0].metadata['file_name'] = documents[0].metadata['filename'] 
         elif os.path.isfile(path):           
-            print('(rag) 目前仅支持txt\pdf文件')
+            print('(rag) Only support txt\pdf file')
         elif os.path.isdir(path):
             if os.path.exists(path) is False:
-                print(f'(rag) 没有找到目录{path}')
+                print(f'(rag) Path not find{path}')
                 return
             else:
                 documents = SimpleDirectoryReader(path).load_data()
@@ -240,7 +242,7 @@ class MilvusExecutor(Executor):
         num_entities_prev = self._milvus_client.query(collection_name='history_rag',filter="",output_fields=["count(*)"])[0]["count(*)"]
         res = self._milvus_client.delete(collection_name=config.milvus.collection_name, filter=f"file_name=='{path}'")
         num_entities = self._milvus_client.query(collection_name='history_rag',filter="",output_fields=["count(*)"])[0]["count(*)"]
-        print(f'(rag) 现有{num_entities}条，删除{num_entities_prev - num_entities}条数据')
+        print(f'(rag) {num_entities} data existing，delete {num_entities_prev - num_entities} data')
     
     def query(self, question):
         if self.index is None:
@@ -253,7 +255,7 @@ class MilvusExecutor(Executor):
                 print(f'{question}', i)
                 content = context.node.get_content(metadata_mode=MetadataMode.LLM)
                 print(content)
-            print('-------------------------------------------------------参考资料---------------------------------------------------------')
+            print('-------------------------------------------------------Reference---------------------------------------------------------')
         response = self.query_engine.query(question)
         return response
 
@@ -266,11 +268,11 @@ class PipelineExecutor(Executor):
     
         self.config = config
         if len(self.ZILLIZ_CLUSTER_ID) == 0:
-            print('ZILLIZ_CLUSTER_ID 参数为空')
+            print('ZILLIZ_CLUSTER_ID is None')
             exit()
 
         if len(self.ZILLIZ_TOKEN) == 0:
-            print('ZILLIZ_TOKEN 参数为空')
+            print('ZILLIZ_TOKEN is None')
             exit()
         
         self.config = config
@@ -317,7 +319,7 @@ class PipelineExecutor(Executor):
                     metadata_schema={"digest_from":"VarChar"}, chunk_size=self.config.pipeline.chunk_size
                 )
         except Exception as e:
-            print('(rag) zilliz pipeline 连接异常', str(e))
+            print('(rag) zilliz pipeline connection exception', str(e))
             exit()
         try:
             self._milvus_client = MilvusClient(
@@ -325,12 +327,12 @@ class PipelineExecutor(Executor):
                 token=self.ZILLIZ_TOKEN 
             )
         except Exception as e:
-            print('(rag) zilliz cloud 连接异常', str(e))
+            print('(rag) zilliz cloud connection exception', str(e))
 
     def build_index(self, path, overwrite):
         config = self.config
         if not is_valid_url(path) or 'github' not in path:
-            print('(rag) 不是一个合法的url，请尝试`https://raw.githubusercontent.com/wxywb/history_rag/master/data/history_24/baihuasanguozhi.txt`')
+            print('(rag) It is an illegal url，please try `https://raw.githubusercontent.com/wxywb/history_rag/master/{path}` again')
             return
         if overwrite == True:
             self._milvus_client.drop_collection(config.pipeline.collection_name)
@@ -342,7 +344,7 @@ class PipelineExecutor(Executor):
         if is_github_folder_url(path):
             urls = get_github_repo_contents(path)
             for url in urls:
-                print(f'(rag) 正在构建索引 {url}')
+                print(f'(rag) Building index {url}')
                 self.build_index(url, False)  # already deleted original collection
         elif path.endswith('.txt'):
             self.index.insert_doc_url(
@@ -350,7 +352,7 @@ class PipelineExecutor(Executor):
                 metadata={"digest_from": HistorySentenceWindowNodeParser.book_name(os.path.basename(path))},
             )
         else:
-            print('(rag) 只有github上以txt结尾或文件夹可以被支持。')
+            print('(rag) Only support txt or folders end with on GitHub.')
 
     def build_query_engine(self):
         config = self.config
@@ -377,7 +379,7 @@ class PipelineExecutor(Executor):
         num_entities_prev = self._milvus_client.query(collection_name='history_rag',filter="",output_fields=["count(*)"])[0]["count(*)"]
         res = self._milvus_client.delete(collection_name=config.milvus.collection_name, filter=f"doc_name=='{path}'")
         num_entities = self._milvus_client.query(collection_name='history_rag',filter="",output_fields=["count(*)"])[0]["count(*)"]
-        print(f'(rag) 现有{num_entities}条，删除{num_entities_prev - num_entities}条数据')
+        print(f'(rag) {num_entities} data existing，delete {num_entities_prev - num_entities} data')
 
     def query(self, question):
         if self.index is None:
@@ -390,7 +392,7 @@ class PipelineExecutor(Executor):
                 print(f'{question}', i)
                 content = context.node.get_content(metadata_mode=MetadataMode.LLM)
                 print(content)
-            print('-------------------------------------------------------参考资料---------------------------------------------------------')
+            print('-------------------------------------------------------Reference---------------------------------------------------------')
         response = self.query_engine.query(question)
         return response
 
