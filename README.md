@@ -41,12 +41,12 @@ python cli.py
 7. other features
     - remove index: "remove filename"
     ```
-    (rag) build menu.pdf
+    (rag) build data/bitcoin.pdf
     ```
     - query: "ask"
     ```
     (rag) ask
-    (rag) 问题:年年有余怎么做？
+    (rag) Question: what is bitcoin？
     ```
 # how to use(GUI)
 - to be finished
