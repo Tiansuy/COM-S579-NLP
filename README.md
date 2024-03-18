@@ -35,13 +35,13 @@ setx OPENAI_API_KEY "your-api-key-here"
 format:"build your_file_path"
 ```
 python cli.py
-(rag) build ./data/menu.pdf
+(rag) build ./data/bitcoin.pdf
 ```
 
 7. other features
     - remove index: "remove filename"
     ```
-    (rag) build data/bitcoin.pdf
+    (rag) remove bitcoin.pdf
     ```
     - query: "ask"
     ```
