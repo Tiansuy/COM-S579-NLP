@@ -49,5 +49,7 @@ python cli.py
     (rag) 问题:年年有余怎么做？
     ```
 # how to use(GUI)
-- to be finished
+```
+    (rag) build menu.pdf
+```
 
