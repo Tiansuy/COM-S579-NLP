@@ -49,7 +49,9 @@ python cli.py
     (rag) Question: what is bitcoin？
     ```
 # how to use(GUI)
+
 ```
-    (rag) build menu.pdf
+python gradioui.py
+(rag) build menu.pdf
 ```
 
