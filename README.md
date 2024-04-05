@@ -1,5 +1,6 @@
 # COM-S579-NLP
 COM-S579-NLP-course-project-RAG
+
 Demo video link: https://youtu.be/uP9FPIQGEw4
 
 # requirements
