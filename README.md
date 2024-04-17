@@ -52,7 +52,9 @@ python cli.py
     ```
 # how to use(GUI)
 
-GUI demo video: https://github.com/Tiansuy/COM-S579-NLP
+GUI demo video: https://www.youtube.com/watch?v=b9TECWSOFjw
+
+Command line for starting GUI
 
 ```
 python gradioui.py
