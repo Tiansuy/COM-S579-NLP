@@ -1,6 +1,8 @@
 # COM-S579-NLP
 COM-S579-NLP-course-project-RAG
 
+Demo video link: https://youtu.be/uP9FPIQGEw4
+
 # requirements
 - llama-index==0.9.39
 - pymilvus
@@ -26,7 +28,8 @@ sudo docker compose up -d
 ```
 pip install -r requirements.txt
 ```
-5. set up openai api key to environment variable
+5. set up openai api key to environment variable. You can find the details about how to setup in the link
+https://platform.openai.com/docs/quickstart#:~:text=Account%20setup,not%20share%20it%20with%20anyone.
 ```
 setx OPENAI_API_KEY "your-api-key-here"
 ```
@@ -50,8 +53,11 @@ python cli.py
     ```
 # how to use(GUI)
 
+GUI demo video: https://www.youtube.com/watch?v=b9TECWSOFjw
+
+Command line for starting GUI
+
 ```
 python gradioui.py
-(rag) build menu.pdf
 ```
 
