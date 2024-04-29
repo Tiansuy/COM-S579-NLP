@@ -77,7 +77,6 @@ def get_branch_head_sha(owner, repo, branch):
     return sha
 
 def get_github_repo_contents(repo_url):
-    # repo_url example: https://raw.githubusercontent.com/wxywb/history_rag/master/data/history_24/
     repo_owner = repo_url.split('/')[3]
     repo_name = repo_url.split('/')[4]
     branch = repo_url.split('/')[5]
