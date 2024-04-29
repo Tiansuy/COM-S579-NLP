@@ -27,6 +27,8 @@ sudo docker compose up -d
 4. install python dependencies(recommend conda env)
 ```
 pip install -r requirements.txt
+```
+```
 pip install sentence-transformers # if you do not install it before
 ```
 5. set up openai api key to environment variable. You can find the details about how to setup in the link
