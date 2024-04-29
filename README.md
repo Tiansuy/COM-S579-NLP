@@ -28,7 +28,8 @@ sudo docker compose up -d
 ```
 pip install -r requirements.txt
 ```
-5. set up openai api key to environment variable
+5. set up openai api key to environment variable. You can find the details about how to setup in the link
+https://platform.openai.com/docs/quickstart#:~:text=Account%20setup,not%20share%20it%20with%20anyone.
 ```
 setx OPENAI_API_KEY "your-api-key-here"
 ```
